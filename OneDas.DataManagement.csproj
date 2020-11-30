@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BlazorMonaco" Version="1.5.0" />
+    <PackageReference Include="OmniSharp.Roslyn.CSharp" Version="1.37.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="OmniSharp\OmniSharpSignatureHelpService.tt">
+      <LastGenOutput>OmniSharpSignatureHelpService.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+    <None Update="OmniSharp\OmniSharpCompletionService.tt">
+      <LastGenOutput>OmniSharpCompletionService.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="OmniSharp\OmniSharpCompletionService.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OmniSharpCompletionService.tt</DependentUpon>
+    </Compile>
+    <Compile Update="OmniSharp\OmniSharpSignatureHelpService.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OmniSharpSignatureHelpService.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\System.Runtime.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

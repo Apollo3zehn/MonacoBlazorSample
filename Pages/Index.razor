@@ -1,0 +1,59 @@
+@page "/"
+@implements IDisposable
+@inject IJSRuntime JS;
+@inject MonacoService MonacoService;
+
+<MonacoEditor @ref="_editor" ConstructionOptions="EditorConstructionOptions" OnDidChangeModelContent="OnDidChangeModelContent" />
+
+@if (this.Diagnostics is not null)
+{
+    @foreach (var diagnostic in this.Diagnostics)
+    {
+        <div>(@((diagnostic.Start.Line + 1) + ", " + (diagnostic.Start.Character + 1))): @diagnostic.Message</div>
+    }
+}
+
+@code {
+
+    private bool _hasRegistered = false;
+    private MonacoEditor _editor;
+    private DotNetObjectReference<MonacoService> _objRef;
+    private List<MonacoService.Diagnostic> Diagnostics { get; set; }
+
+    private StandaloneEditorConstructionOptions EditorConstructionOptions(MonacoEditor editor)
+    {
+        return new StandaloneEditorConstructionOptions
+        {
+            AutomaticLayout = true,
+            Language = "csharp",
+            Value = this.MonacoService.DefaultCode,
+            Theme = "vs-dark"
+        };
+    }
+
+    private async Task OnDidChangeModelContent(ModelContentChangedEvent e)
+    {
+        var uri = (await _editor.GetModel()).Uri;
+        var code = await _editor.GetValue();
+
+        this.Diagnostics = await this.MonacoService.GetDiagnosticsAsync(code);
+
+        await JS.InvokeAsync<string>("setDiagnostics", this.Diagnostics, uri);
+        await this.InvokeAsync(() => this.StateHasChanged());
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_hasRegistered)
+        {
+            _objRef = DotNetObjectReference.Create(this.MonacoService);
+            await JS.InvokeAsync<string>("registerProviders", _objRef);
+            _hasRegistered = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+    }
+}

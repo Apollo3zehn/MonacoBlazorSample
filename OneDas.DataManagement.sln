@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneDas.DataManagement", "OneDas.DataManagement.csproj", "{8BA99A33-743D-40BC-A461-E5BBF6448042}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BA99A33-743D-40BC-A461-E5BBF6448042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BA99A33-743D-40BC-A461-E5BBF6448042}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BA99A33-743D-40BC-A461-E5BBF6448042}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BA99A33-743D-40BC-A461-E5BBF6448042}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2867A7D6-997F-455A-BA87-433001F4BF89}
+	EndGlobalSection
+EndGlobal
