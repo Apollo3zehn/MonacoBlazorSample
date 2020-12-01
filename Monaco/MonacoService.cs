@@ -2,6 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
+using OmniSharp.Models;
 using OmniSharp.Models.SignatureHelp;
 using OmniSharp.Models.v1.Completion;
 using OmniSharp.Options;
@@ -21,6 +22,7 @@ namespace OneDas.DataManagement.Monaco
         RoslynProject _diagnosticProject;
         OmniSharpCompletionService _completionService;
         OmniSharpSignatureHelpService _signatureService;
+        OmniSharpQuickInfoProvider _quickInfoProvider;
 
         #endregion
 
@@ -48,6 +50,7 @@ namespace OneDas.DataManagement.Monaco
 
             _completionService = new OmniSharpCompletionService(_completionProject.Workspace, formattingOptions, loggerFactory);
             _signatureService = new OmniSharpSignatureHelpService(_completionProject.Workspace);
+            _quickInfoProvider = new OmniSharpQuickInfoProvider(_completionProject.Workspace, formattingOptions, loggerFactory);
 
             // default code
             this.DefaultCode = 
@@ -116,6 +119,15 @@ namespace {nameof(OneDas)}.{nameof(DataManagement)}
             var signatureHelpResponse = await _signatureService.Handle(signatureHelpRequest, document);
 
             return signatureHelpResponse;
+        }
+
+        [JSInvokable]
+        public async Task<QuickInfoResponse> GetQuickInfoAsync(QuickInfoRequest quickInfoRequest)
+        {
+            var document = _diagnosticProject.Workspace.CurrentSolution.GetDocument(_diagnosticProject.DocumentId);
+            var quickInfoResponse = await _quickInfoProvider.Handle(quickInfoRequest, document);
+
+            return quickInfoResponse;
         }
 
         public async Task<List<Diagnostic>> GetDiagnosticsAsync(string code)

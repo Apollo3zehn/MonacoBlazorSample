@@ -21,17 +21,23 @@ function registerProviders(dotnetHelper) {
         // this signature is outdated, actually it is resolveCompletionItem: (item, token)
         // https://github.com/microsoft/vscode/commit/ce850e02d56cd3ff5b5a93ce23c2272d3bac0fa2
         resolveCompletionItem: (model, position, item) => {
-            return resolveCompletionItem(item, dotnetHelper)
+            return this.resolveCompletionItem(item, dotnetHelper)
         },
         provideCompletionItems: (model, position, context) => {
-            return provideCompletionItems(model, position, context, dotnetHelper)
+            return this.provideCompletionItems(model, position, context, dotnetHelper)
         }
     });
 
     window.monaco.languages.registerSignatureHelpProvider("csharp", {
         signatureHelpTriggerCharacters: ['('],
         provideSignatureHelp: (model, position) => {
-            return provideSignatureHelp(model, position, dotnetHelper)
+            return this.provideSignatureHelp(model, position, dotnetHelper)
+        }
+    });
+
+    window.monaco.languages.registerHoverProvider("csharp", {
+        provideHover: (model, position) => {
+            return this.provideHover(model, position, dotnetHelper)
         }
     });
 }
@@ -86,7 +92,7 @@ async function resolveCompletionItem(item, dotnetHelper) {
 
 async function provideSignatureHelp(model, position, dotnetHelper) {
 
-    let req = _createRequest(position);
+    let req = this._createRequest(position);
 
     try {
         let code = model.getValue();
@@ -128,6 +134,28 @@ async function provideSignatureHelp(model, position, dotnetHelper) {
         }
     }
     catch (error) {
+        return undefined;
+    }
+}
+
+async function provideHover(document, position, dotnetHelper) {
+    let request = this._createRequest(position);
+    try {
+        const response = await dotnetHelper.invokeMethodAsync("GetQuickInfoAsync", request);
+        if (!response || !response.markdown) {
+            return undefined;
+        }
+
+        return {
+            contents: [
+                {
+                    value: response.markdown
+                }
+            ]
+        }
+    }
+    catch (error) {
+        debugger
         return undefined;
     }
 }

@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="OmniSharp\OmniSharpQuickInfoProvider.tt">
+      <LastGenOutput>OmniSharpQuickInfoProvider.cs</LastGenOutput>
+      <Generator>TextTemplatingFileGenerator</Generator>
+    </None>
     <None Update="OmniSharp\OmniSharpSignatureHelpService.tt">
       <LastGenOutput>OmniSharpSignatureHelpService.cs</LastGenOutput>
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -22,14 +26,19 @@
 
   <ItemGroup>
     <Compile Update="OmniSharp\OmniSharpCompletionService.cs">
+      <DependentUpon>OmniSharpCompletionService.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>OmniSharpCompletionService.tt</DependentUpon>
     </Compile>
     <Compile Update="OmniSharp\OmniSharpSignatureHelpService.cs">
+      <DependentUpon>OmniSharpSignatureHelpService.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>OmniSharpSignatureHelpService.tt</DependentUpon>
+    </Compile>
+    <Compile Update="OmniSharp\OmniSharpQuickInfoProvider.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>OmniSharpQuickInfoProvider.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -37,6 +46,10 @@
     <None Update="Resources\System.Runtime.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 
 </Project>
